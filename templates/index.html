@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <link rel='stylesheet' href='{{ url_for('static', filename='css/style.css') }}'>
+    <title>Flask Notes</title>
+</head>
+<body>
+    <div class='container'>
+        <h1>My Notes</h1>
+        <a href='{{ url_for('add_note') }}' class='btn-primary'>Add New Note</a>
+        <hr>
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            {% for message in messages %}
+              <div class='flash'>{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+        <div class='notes-grid'>
+            {% for note in notes %}
+                <div class='note-card'>
+                    <h3>{{ note['title'] }}</h3>
+                    <p>{{ note['content'] }}</p>
+                    <div class='actions'>
+                        <a href='{{ url_for('edit_note', id=note['id']) }}' class='btn-edit'>Edit</a>
+                        <form action='{{ url_for('delete_note', id=note['id']) }}' method='POST' style='display:inline;'>
+                            <button type='submit' class='btn-delete' onclick='return confirm("Are you sure?")'>Delete</button>
+                        </form>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
